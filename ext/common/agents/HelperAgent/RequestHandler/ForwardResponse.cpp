@@ -30,7 +30,7 @@ private:
 
 static Channel::Result
 _onAppOutputData(Channel *_channel, const MemoryKit::mbuf &buffer, int errcode) {
-	FdInputChannel *channel = reinterpret_cast<FdInputChannel *>(_channel);
+	FdSourceChannel *channel = reinterpret_cast<FdSourceChannel *>(_channel);
 	Request *req = static_cast<Request *>(static_cast<
 		ServerKit::BaseHttpRequest *>(channel->getHooks()->userData));
 	Client *client = static_cast<Client *>(req->client);
@@ -67,7 +67,7 @@ onAppOutputData(Client *client, Request *req, const MemoryKit::mbuf &buffer, int
 
 			switch (resp->httpState) {
 			case AppResponse::COMPLETE:
-				req->appOutput.stop();
+				req->appSource.stop();
 				onAppResponseBegin(client, req);
 				return Channel::Result(ret, false);
 			case AppResponse::PARSING_BODY_WITH_LENGTH:
